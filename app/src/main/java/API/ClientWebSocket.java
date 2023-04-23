@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 
 import Models.Message;
 import tech.gusavila92.websocketclient.WebSocketClient;
@@ -29,7 +30,7 @@ public class ClientWebSocket {
             @Override
             public void onOpen() {
                 Log.i("WebSocket", "Session is starting");
-                Message message = new Message("Ivan", 1, 2, "Hey IT S FIRST MESSAGE");
+                Message message = new Message("Ivan", 3, 3, "Hey IT S FIRST MESSAGE", new Date());
                 //webSocketClient.addHeader("user_id", String.valueOf(nameKey));
                 Gson gson = new Gson();
                 String obj = gson.toJson(message);

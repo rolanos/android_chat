@@ -17,6 +17,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 import API.ClientWebSocket;
+import Models.Chat;
+import Models.Message;
 import Models.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         server.createWebSocketClient();
-        ArrayList<User> resp = User.getUserList();
+        ArrayList<Message> resp = Chat.getChatContent(2);
         if(resp != null){
             System.out.println(resp);
         }
