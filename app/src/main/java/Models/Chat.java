@@ -36,7 +36,13 @@ public class Chat {
             String url ="http://10.0.2.2:8080/get-chats-content?chat_id="+Integer.toString(chatID);
             ServletTask task = new ServletTask();
             String result = task.execute(url).get();
-            return gson.fromJson(result, new TypeToken<ArrayList<Message>>(){}.getType());
+            ArrayList<Message> list = new ArrayList<Message>();
+            try {
+                list = gson.fromJson(result, new TypeToken<ArrayList<Message>>(){}.getType());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return list;
         }catch (Exception e){
             e.printStackTrace();
             return null;

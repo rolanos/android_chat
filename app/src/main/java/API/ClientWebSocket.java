@@ -14,6 +14,13 @@ import tech.gusavila92.websocketclient.WebSocketClient;
 //connection to server websocket
 public class ClientWebSocket {
     public WebSocketClient webSocketClient;
+
+    public void send(Message message){
+        message = new Message("Test", 30, 30, "AAAAAA", new Date());
+        Gson gson = new Gson();
+        String obj = gson.toJson(message);
+        webSocketClient.send(obj);
+    }
     public void createWebSocketClient() {
         URI uri;
         try {
@@ -30,16 +37,16 @@ public class ClientWebSocket {
             @Override
             public void onOpen() {
                 Log.i("WebSocket", "Session is starting");
-                Message message = new Message("Ivan", 3, 3, "Hey IT S FIRST MESSAGE", new Date());
-                //webSocketClient.addHeader("user_id", String.valueOf(nameKey));
-                Gson gson = new Gson();
-                String obj = gson.toJson(message);
-                webSocketClient.send(obj);
             }
             @Override
             public void onTextReceived(String s) {
                 Gson gson = new Gson();
-                Message message = gson.fromJson(s, Message.class);
+                Message message = null;
+                try {
+                    message = gson.fromJson(s, Message.class);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 System.out.println("Сообщение от сервера пришло: " + message.getUserName() + message.getText());
                 //Как-то изменить UI при получении сообщения
             }

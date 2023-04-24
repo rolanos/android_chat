@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         server.createWebSocketClient();
-        ArrayList<Message> resp = Chat.getChatContent(2);
+        server.send(null);
+        ArrayList<Message> resp = Chat.getChatContent(3);
         if(resp != null){
             System.out.println(resp);
         }
