@@ -1,22 +1,33 @@
 package API;
 
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.example.myapplication.RoomActivity;
 import com.google.gson.Gson;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
 
 import Models.Message;
 import tech.gusavila92.websocketclient.WebSocketClient;
 
 //connection to server websocket
 public class ClientWebSocket {
+    private RoomActivity activity;
     public WebSocketClient webSocketClient;
+    public ListView messageList;
+    public ArrayAdapter<String> adapter;
+
+    public ClientWebSocket(RoomActivity activity){
+        this.activity = activity;
+    }
+    public void setAdapterParam(ArrayAdapter<String> adapter) {
+        this.adapter = adapter;
+    }
 
     public void send(Message message){
-        message = new Message("Test", 30, 30, "AAAAAA", new Date());
         Gson gson = new Gson();
         String obj = gson.toJson(message);
         webSocketClient.send(obj);
@@ -40,15 +51,21 @@ public class ClientWebSocket {
             }
             @Override
             public void onTextReceived(String s) {
-                Gson gson = new Gson();
-                Message message = null;
-                try {
-                    message = gson.fromJson(s, Message.class);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                System.out.println("Сообщение от сервера пришло: " + message.getUserName() + message.getText());
-                //Как-то изменить UI при получении сообщения
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Gson gson = new Gson();
+                        Message message = null;
+                        try {
+                            message = gson.fromJson(s, Message.class);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        System.out.println("Сообщение от сервера пришло: " + message.getUserName() + message.getText());
+                        String str = message.getUserName() + '\n' + message.getText();
+                        adapter.add(str);
+                    }
+                });
             }
 
             @Override
