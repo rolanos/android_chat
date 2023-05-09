@@ -1,11 +1,17 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -20,7 +26,7 @@ public class RoomActivity extends AppCompatActivity {
 
     private EditText messageBox;
 
-    private TextView send;
+    private ImageButton send;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ClientWebSocket webSocket = new ClientWebSocket(this);
@@ -35,6 +41,11 @@ public class RoomActivity extends AppCompatActivity {
         Integer id = getIntent().getIntExtra("id", 0);
         Integer userId = getIntent().getIntExtra("userId", 0);
         String userName = getIntent().getStringExtra("userName");
+        String chatName = getIntent().getStringExtra("chatName");
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(chatName);
+
         ArrayList<Message> messagesList = Chat.getChatContent(id);
         ArrayList<String> names = new ArrayList<>();
         if(messagesList != null){
@@ -43,11 +54,11 @@ public class RoomActivity extends AppCompatActivity {
                 names.add(s);
             }
         }
+        ListView listView = findViewById(R.id.messageList);
+        CustomAdapter adapter = new CustomAdapter(this, messagesList, userName);
+        listView.setAdapter(adapter);
 
 
-
-        webSocket.setAdapterParam(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, names));
-        webSocket.messageList.setAdapter(webSocket.adapter);
 
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -69,5 +80,21 @@ public class RoomActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorite:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

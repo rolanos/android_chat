@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         listView = findViewById(R.id.listView);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("List of chats");
 
         Integer id = getIntent().getIntExtra("id", 0);
         String userName = getIntent().getStringExtra("userName");
@@ -49,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
                 intent.putExtra("id", idChat);
                 intent.putExtra("userId", id);
                 intent.putExtra("userName", userName);
+                intent.putExtra("chatName", name);
                 startActivity(intent);
             }
         });
