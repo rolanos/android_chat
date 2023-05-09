@@ -36,7 +36,7 @@ public class ChatActivity extends AppCompatActivity {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id1) {
                 String name = mAdapter.getItem(position);
                 Integer idChat = 0;
                 for (Chat i:chats) {
