@@ -16,6 +16,7 @@ import tech.gusavila92.websocketclient.WebSocketClient;
 
 //connection to server websocket
 public class ClientWebSocket {
+    public int chatId;
     private RoomActivity activity;
     public WebSocketClient webSocketClient;
     public ListView messageList;
@@ -59,6 +60,10 @@ public class ClientWebSocket {
                             message = gson.fromJson(s, Message.class);
                         }catch (Exception e){
                             e.printStackTrace();
+                        }
+                        if(chatId != message.getChatID())
+                        {
+                            return;
                         }
                         System.out.println("Сообщение от сервера пришло: " + message.getUserName() + message.getText());
                         newMessage=message;

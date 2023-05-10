@@ -38,8 +38,8 @@ public class RoomActivity extends AppCompatActivity {
         Integer userId = getIntent().getIntExtra("userId", 0);
         String userName = getIntent().getStringExtra("userName");
         String chatName = getIntent().getStringExtra("chatName");
-
-        ActionBar actionBar = getSupportActionBar();
+        webSocket.chatId = id;
+                ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(chatName);
 
         webSocket.MessagesList = Chat.getChatContent(id);
