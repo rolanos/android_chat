@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import Models.Message;
 import tech.gusavila92.websocketclient.WebSocketClient;
@@ -19,6 +20,9 @@ public class ClientWebSocket {
     public WebSocketClient webSocketClient;
     public ListView messageList;
     public ArrayAdapter<String> adapter;
+
+    public ArrayList<Message> MessagesList;
+    public Message newMessage;
 
     public ClientWebSocket(RoomActivity activity){
         this.activity = activity;
@@ -62,8 +66,8 @@ public class ClientWebSocket {
                             e.printStackTrace();
                         }
                         System.out.println("Сообщение от сервера пришло: " + message.getUserName() + message.getText());
-                        String str = message.getUserName() + '\n' + message.getText();
-                        adapter.add(str);
+                        newMessage=message;
+                        MessagesList.add(newMessage);
                     }
                 });
             }

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +35,6 @@ public class RoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
 
-        webSocket.messageList = findViewById(R.id.messageList);
         messageBox = findViewById(R.id.messageBox);
         send = findViewById(R.id.send);
 
@@ -46,19 +46,11 @@ public class RoomActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(chatName);
 
-        ArrayList<Message> messagesList = Chat.getChatContent(id);
-        ArrayList<String> names = new ArrayList<>();
-        if(messagesList != null){
-            for (Message i:messagesList) {
-                String s = i.getUserName() + '\n' + i.getText();
-                names.add(s);
-            }
-        }
+        webSocket.MessagesList = Chat.getChatContent(id);
+
         ListView listView = findViewById(R.id.messageList);
-        CustomAdapter adapter = new CustomAdapter(this, messagesList, userName);
+        CustomAdapter adapter = new CustomAdapter(this, webSocket.MessagesList, userId);
         listView.setAdapter(adapter);
-
-
 
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -73,8 +65,8 @@ public class RoomActivity extends AppCompatActivity {
                 if (!message.isEmpty()) {
 
 
-                    Message newMessage = new Message(userName, userId, id, message, new Date());
-                    webSocket.send(newMessage);
+                    Message NewMessage = new Message(userName, userId, id, message, new Date());
+                    webSocket.send(NewMessage);
                     messageBox.setText("");
                     return;
                 }

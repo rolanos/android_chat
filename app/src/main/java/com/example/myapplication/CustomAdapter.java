@@ -18,11 +18,11 @@ public class CustomAdapter extends BaseAdapter {
     private ArrayList<Message> messages;
     private LayoutInflater inflater;
 
-    private String UserName;
+    private int UserId;
 
-    public CustomAdapter(Context context, ArrayList<Message> messages, String Username) {
+    public CustomAdapter(Context context, ArrayList<Message> messages, int userId) {
         this.messages = messages;
-        UserName=Username;
+        UserId=userId;
         inflater = LayoutInflater.from(context);
     }
 
@@ -49,7 +49,7 @@ public class CustomAdapter extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
         Message message = messages.get(position);
-        if (message.getUserName().equals(UserName)) {
+        if (message.getUserID()==UserId) {
             return TYPE_MY_MESSAGE;
         } else {
             return TYPE_OTHER_MESSAGE;
