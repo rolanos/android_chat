@@ -5,17 +5,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import API.ClientWebSocket;
@@ -49,8 +45,8 @@ public class RoomActivity extends AppCompatActivity {
         webSocket.MessagesList = Chat.getChatContent(id);
 
         ListView listView = findViewById(R.id.messageList);
-        CustomAdapter adapter = new CustomAdapter(this, webSocket.MessagesList, userId);
-        listView.setAdapter(adapter);
+        webSocket.adapter = new CustomAdapter(this, webSocket.MessagesList, userId);
+        listView.setAdapter(webSocket.adapter);
 
 
         send.setOnClickListener(new View.OnClickListener() {

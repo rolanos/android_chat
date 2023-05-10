@@ -1,9 +1,9 @@
 package API;
 
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.myapplication.CustomAdapter;
 import com.example.myapplication.RoomActivity;
 import com.google.gson.Gson;
 
@@ -19,16 +19,13 @@ public class ClientWebSocket {
     private RoomActivity activity;
     public WebSocketClient webSocketClient;
     public ListView messageList;
-    public ArrayAdapter<String> adapter;
+    public CustomAdapter adapter;
 
     public ArrayList<Message> MessagesList;
     public Message newMessage;
 
     public ClientWebSocket(RoomActivity activity){
         this.activity = activity;
-    }
-    public void setAdapterParam(ArrayAdapter<String> adapter) {
-        this.adapter = adapter;
     }
 
     public void send(Message message){
@@ -50,9 +47,7 @@ public class ClientWebSocket {
         webSocketClient = new WebSocketClient(uri) {
 
             @Override
-            public void onOpen() {
-                Log.i("WebSocket", "Session is starting");
-            }
+            public void onOpen() {}
             @Override
             public void onTextReceived(String s) {
                 activity.runOnUiThread(new Runnable() {
@@ -68,6 +63,7 @@ public class ClientWebSocket {
                         System.out.println("Сообщение от сервера пришло: " + message.getUserName() + message.getText());
                         newMessage=message;
                         MessagesList.add(newMessage);
+                        adapter.notifyDataSetChanged();
                     }
                 });
             }
