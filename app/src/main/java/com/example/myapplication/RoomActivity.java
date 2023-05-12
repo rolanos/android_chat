@@ -8,15 +8,20 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.Date;
 
 import API.ClientWebSocket;
 import Models.Chat;
 import Models.Message;
+import io.reactivex.Observable;
+import io.reactivex.observers.DisposableObserver;
 
 
 public class RoomActivity extends AppCompatActivity {
@@ -33,6 +38,7 @@ public class RoomActivity extends AppCompatActivity {
 
         messageBox = findViewById(R.id.messageBox);
         send = findViewById(R.id.send);
+        Observable<Object> observable = RxView.clicks(send);
 
         Integer id = getIntent().getIntExtra("id", 0);
         Integer userId = getIntent().getIntExtra("userId", 0);
@@ -49,25 +55,26 @@ public class RoomActivity extends AppCompatActivity {
         listView.setAdapter(webSocket.adapter);
 
 
-        send.setOnClickListener(new View.OnClickListener() {
+        DisposableObserver<Object> observer = new DisposableObserver<Object>() {
             @Override
-            public void onClick(View view) {
-
-
+            public void onNext(Object o) {
                 String message = messageBox.getText().toString();
-
-
-
-                if (!message.isEmpty()) {
-
-
-                    Message NewMessage = new Message(userName, userId, id, message, new Date());
-                    webSocket.send(NewMessage);
-                    messageBox.setText("");
-                    return;
-                }
+                Message NewMessage = new Message(userName, userId, id, message, new Date());
+                webSocket.send(NewMessage);
+                messageBox.setText("");
             }
-        });
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(getBaseContext(), "Error",
+                        Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+        observable.subscribeWith(observer);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
